@@ -28,6 +28,53 @@ export const MULTISIG_CONTROLLER_ABI =[
 		"type": "function"
 	},
 	{
+        "inputs": [
+            { "internalType": "address", "name": "to", "type": "address" },
+            { "internalType": "uint256", "name": "value", "type": "uint256" },
+            { "internalType": "bool", "name": "isTokenTransfer", "type": "bool" },
+            { "internalType": "address", "name": "tokenAddress", "type": "address" },
+            { "internalType": "bytes", "name": "data", "type": "bytes" }
+        ],
+        "name": "submitTransaction",
+        "outputs": [{ "internalType": "uint256", "name": "txId", "type": "uint256" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "token", "type": "address" },
+            { "internalType": "address[]", "name": "recipients", "type": "address[]" },
+            { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" }
+        ],
+        "name": "submitBatchTransferDifferent",
+        "outputs": [{ "internalType": "uint256", "name": "txId", "type": "uint256" }],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "token", "type": "address" },
+            { "internalType": "address[]", "name": "recipients", "type": "address[]" },
+            { "internalType": "uint256", "name": "amountPer", "type": "uint256" }
+        ],
+        "name": "submitBatchTransferEqual",
+        "outputs": [{ "internalType": "uint256", "name": "txId", "type": "uint256" }],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "newOwner", "type": "address" },
+            { "internalType": "string", "name": "ownerName", "type": "string" },
+            { "internalType": "uint256", "name": "pct", "type": "uint256" },
+            { "internalType": "bool", "name": "removable", "type": "bool" }
+        ],
+        "name": "submitAddOwner",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",

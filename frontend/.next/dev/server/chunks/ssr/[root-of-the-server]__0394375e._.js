@@ -225,7 +225,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$modals$2f$netw
 ;
 const metadata = {
     title: 'BlockDAG Multisig Factory - Secure Treasury Management',
-    description: 'Deploy percentage-based multisig wallets with timelocks and batch confirmations on Celo Sepolia',
+    description: 'Deploy percentage-based multisig wallets with timelocks and batch confirmations on Base sepolia',
     generator: 'v0.app',
     icons: {
         icon: [

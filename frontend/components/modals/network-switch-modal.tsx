@@ -12,12 +12,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-// NOTE: Ethers.js is used for utilities, but we interact directly with window.ethereum.
-import { BrowserProvider, hexlify } from 'ethers';
 
-// Celo Sepolia Chain ID in decimal format
-const CELO_SEPOLIA_CHAIN_ID = 11142220;
-
+// Base Sepolia Chain Configuration
+const BASE_SEPOLIA_CHAIN_ID = 84532;
+const BASE_SEPOLIA_HEX = '0x14a34'; // 84532 converted to hex
 
 export function NetworkSwitchModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,14 +24,14 @@ export function NetworkSwitchModal() {
 
   // Function to check connection and chain ID
   const checkNetworkStatus = useCallback(async () => {
-    if (typeof window.ethereum === 'undefined') {
+    if (typeof window === 'undefined' || !window.ethereum) {
       setIsConnected(false);
       setCurrentChainId(null);
       return;
     }
 
     try {
-      // Check if wallet is connected (by checking accounts)
+      // Check if wallet is connected
       const accounts = await window.ethereum.request({ method: 'eth_accounts' });
       const connected = accounts && accounts.length > 0;
       setIsConnected(connected);
@@ -45,7 +43,7 @@ export function NetworkSwitchModal() {
         setCurrentChainId(chainIdDec);
 
         // Show modal if connected but on wrong chain
-        if (chainIdDec !== CELO_SEPOLIA_CHAIN_ID) {
+        if (chainIdDec !== BASE_SEPOLIA_CHAIN_ID) {
           setIsOpen(true);
         } else {
           setIsOpen(false);
@@ -63,26 +61,24 @@ export function NetworkSwitchModal() {
 
   // Handler for network switch
   const handleSwitchNetwork = async () => {
-    if (typeof window.ethereum === 'undefined') {
+    if (!window.ethereum) {
       console.error('MetaMask or similar wallet not found.');
       return;
     }
 
     try {
-      // Ethers/RPC method to switch network
+      // Switch network using HEX ID
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: CELO_SEPOLIA_CHAIN_ID }],
+        params: [{ chainId: BASE_SEPOLIA_HEX }],
       });
       
-      // If successful, the 'chainChanged' event will trigger checkNetworkStatus
       setIsOpen(false); 
     } catch (error: any) {
-      // 4902 is the error code for "Chain hasn't been added to MetaMask."
+      // 4902: Chain hasn't been added to MetaMask
       if (error.code === 4902) {
-        // If the chain isn't added, attempt to add it first
         console.log('Chain not recognized, attempting to add...');
-        await addCeloSepoliaChain();
+        await addBaseSepoliaChain();
       } else {
         console.error('Failed to switch network:', error);
       }
@@ -90,59 +86,51 @@ export function NetworkSwitchModal() {
   };
 
   // Helper function to add the chain if not present
-  const addCeloSepoliaChain = async () => {
+  const addBaseSepoliaChain = async () => {
     try {
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [
           {
-            chainId: CELO_SEPOLIA_CHAIN_ID,
-            chainName: 'Celo Sepolia Testnet',
+            chainId: BASE_SEPOLIA_HEX,
+            chainName: 'Base Sepolia',
             nativeCurrency: {
-              name: 'Celo',
-              symbol: 'CELO',
+              name: 'Ether',
+              symbol: 'ETH',
               decimals: 18,
             },
-            rpcUrls: ['https://sepolia-rc.celo-testnet.org/'], 
-            blockExplorerUrls: ['https://celo-sepolia.explorers.ws/'],
+            rpcUrls: ['https://sepolia.base.org'], 
+            blockExplorerUrls: ['https://sepolia.basescan.org'],
           },
         ],
       });
-      // After adding, wallet automatically switches, triggering 'chainChanged'
     } catch (addError) {
-      console.error('Failed to add Celo Sepolia Testnet:', addError);
+      console.error('Failed to add Base Sepolia:', addError);
     }
   };
-
 
   useEffect(() => {
     checkNetworkStatus();
 
-    if (typeof window.ethereum === 'undefined') return;
+    if (!window.ethereum) return;
 
-    // Set up listeners for changes (Ethers/Wagmi best practice)
-    const handleChainChanged = (chainIdHex: string) => {
-      // Reload on network change to clear state and re-initialize
-      window.location.reload();
-    };
-
-    const handleAccountsChanged = (accounts: string[]) => {
-      // Reload on account change
-      window.location.reload();
-    };
+    // Reload page on network/account change to ensure clean state
+    const handleChainChanged = () => window.location.reload();
+    const handleAccountsChanged = () => window.location.reload();
 
     window.ethereum.on('chainChanged', handleChainChanged);
     window.ethereum.on('accountsChanged', handleAccountsChanged);
 
-    // Clean up listeners
     return () => {
-      window.ethereum.removeListener('chainChanged', handleChainChanged);
-      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      if (window.ethereum) {
+        window.ethereum.removeListener('chainChanged', handleChainChanged);
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      }
     };
-  }, [checkNetworkStatus]); // Dependency on useCallback
+  }, [checkNetworkStatus]);
 
   // Render nothing if not connected or already on the correct chain
-  if (!isConnected || currentChainId === CELO_SEPOLIA_CHAIN_ID) {
+  if (!isConnected || currentChainId === BASE_SEPOLIA_CHAIN_ID) {
     return null;
   }
 
@@ -155,22 +143,33 @@ export function NetworkSwitchModal() {
             <AlertDialogTitle>Wrong Network</AlertDialogTitle>
           </div>
           <AlertDialogDescription className="pt-2">
-            You are currently connected to the wrong network. Please switch to Celo Sepolia to continue using the Multisig Factory.
+            You are currently connected to the wrong network. Please switch to <strong>Base Sepolia</strong> to continue using the Multisig Factory.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <div className="bg-muted p-3 rounded-lg text-sm">
-          <p className="font-semibold text-foreground">Required: Celo Sepolia Testnet</p>
-          <p className="text-muted-foreground text-xs mt-1">
-            Current: {currentChainId ? `Chain ID: ${currentChainId}` : 'Unknown'}
-          </p>
-          <p className="text-muted-foreground text-xs">
-            Required: Chain ID: {CELO_SEPOLIA_CHAIN_ID}
-          </p>
+        
+        <div className="bg-muted p-3 rounded-lg text-sm border border-border">
+          <div className="flex justify-between mb-1">
+             <span className="text-muted-foreground">Required Network:</span>
+             <span className="font-semibold text-foreground">Base Sepolia</span>
+          </div>
+          <div className="flex justify-between mb-1">
+             <span className="text-muted-foreground">Chain ID:</span>
+             <span className="font-mono text-xs">{BASE_SEPOLIA_CHAIN_ID}</span>
+          </div>
+          <div className="flex justify-between pt-2 border-t border-border/50 mt-2">
+             <span className="text-muted-foreground">Your Connection:</span>
+             <span className="font-mono text-xs text-orange-500">
+                Chain ID: {currentChainId || 'Unknown'}
+             </span>
+          </div>
         </div>
-        <div className="flex gap-3 justify-end">
+
+        <div className="flex gap-3 justify-end mt-2">
+          {/* Note: We usually don't want a cancel button here if the app strictly requires the network, 
+              but keeping it for UX flexibility */}
           <AlertDialogCancel>Dismiss</AlertDialogCancel>
-          <AlertDialogAction onClick={handleSwitchNetwork} className="bg-primary text-primary-foreground">
-            Switch Network
+          <AlertDialogAction onClick={handleSwitchNetwork}>
+            Switch to Base Sepolia
           </AlertDialogAction>
         </div>
       </AlertDialogContent>

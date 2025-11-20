@@ -4,17 +4,19 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MultiSig } from '@/hooks/use-factory';
-import { ChevronRight, Loader2, PauseCircle, PlayCircle } from 'lucide-react';
+import { ChevronRight, Loader2, PauseCircle, PlayCircle, Settings, ShieldAlert, Clock } from 'lucide-react';
 import { pauseMultisig, unpauseMultisig } from '@/lib/web3';
+import { GovernanceProposalModal, GovernanceType } from '@/components/modals/governance-proposal-modal';
 
 interface SettingsTabProps {
   multisig: MultiSig;
 }
 
 export function SettingsTab({ multisig }: SettingsTabProps) {
-  const [isPending, setIsPending] = useState(false);
+  const [isPausePending, setIsPausePending] = useState(false);
+  const [modalType, setModalType] = useState<GovernanceType>(null);
+  const [modalCurrentValue, setModalCurrentValue] = useState<string | number>('');
 
-  // Helper to format seconds to readable duration
   const formatDuration = (seconds: number) => {
     const hours = seconds / 3600;
     if (hours >= 24) return `${(hours / 24).toFixed(1)} Days`;
@@ -22,107 +24,128 @@ export function SettingsTab({ multisig }: SettingsTabProps) {
   };
 
   const handlePauseToggle = async () => {
-    setIsPending(true);
+    setIsPausePending(true);
     try {
       if (multisig.config.paused) {
         await unpauseMultisig(multisig.controller);
       } else {
         await pauseMultisig(multisig.controller);
       }
-      // In a real app, trigger a refetch here
-      alert(`Transaction submitted to ${multisig.config.paused ? 'unpause' : 'pause'} contract.`);
+      window.location.reload();
     } catch (err: any) {
       console.error(err);
       alert('Error: ' + (err.message || 'Failed to toggle pause state'));
     } finally {
-      setIsPending(false);
+      setIsPausePending(false);
     }
   };
 
-  const settingsList = [
-    {
-      label: 'Required Approval Percentage',
-      value: `${multisig.config.requiredPercentage}%`,
-      action: 'Change',
-      handler: () => alert("Please use the 'Submit Transaction' form with 'submitChangeRequiredPct'")
-    },
-    {
-      label: 'Timelock Period',
-      value: formatDuration(multisig.config.timelockPeriod),
-      action: 'Change',
-      handler: () => alert("Please use the 'Submit Transaction' form with 'submitChangeTimelock'")
-    },
-    {
-      label: 'Expiry Period',
-      value: formatDuration(multisig.config.expiryPeriod),
-      action: 'Change',
-      handler: () => alert("Please use the 'Submit Transaction' form with 'submitChangeExpiry'")
-    },
-    {
-      label: 'Minimum Owners',
-      value: multisig.config.minOwners.toString(),
-      action: 'Change',
-      handler: () => alert("Please use the 'Submit Transaction' form with 'submitChangeMinOwners'")
-    },
-  ];
+  const openModal = (type: GovernanceType, currentVal: string | number) => {
+    setModalType(type);
+    setModalCurrentValue(currentVal);
+  };
 
   return (
-    <div className="space-y-6">
-      {/* Configuration Cards */}
-      <div className="space-y-3">
-        {settingsList.map((setting, idx) => (
-          <Card key={idx} className="border-border bg-card">
-            <CardContent className="p-4 flex items-center justify-between">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+      
+      {/* Governance Settings */}
+      <Card className="border-border bg-card">
+        <CardHeader>
+           <CardTitle className="flex items-center gap-2"><Settings className="h-5 w-5"/> Governance Parameters</CardTitle>
+           <CardDescription>Configure how this multisig operates. Changes require a proposal.</CardDescription>
+        </CardHeader>
+        <CardContent className="divide-y divide-border/50">
+           {/* Percentage */}
+           <div className="flex items-center justify-between py-4 first:pt-0">
               <div>
-                <p className="text-sm text-muted-foreground">{setting.label}</p>
-                <p className="font-semibold text-lg">{setting.value}</p>
+                 <p className="font-medium text-sm">Required Approval</p>
+                 <p className="text-xs text-muted-foreground">Percentage of total voting power needed.</p>
               </div>
-              <Button variant="outline" size="sm" onClick={setting.handler}>
-                {setting.action}
-                <ChevronRight className="h-4 w-4 ml-2" />
+              <div className="flex items-center gap-4">
+                 <span className="font-mono font-bold">{multisig.config.requiredPercentage}%</span>
+                 <Button variant="outline" size="sm" onClick={() => openModal('percentage', multisig.config.requiredPercentage)}>Change</Button>
+              </div>
+           </div>
+
+           {/* Timelock */}
+           <div className="flex items-center justify-between py-4">
+              <div>
+                 <p className="font-medium text-sm">Timelock Period</p>
+                 <p className="text-xs text-muted-foreground">Delay between approval and execution.</p>
+              </div>
+              <div className="flex items-center gap-4">
+                 <span className="font-mono font-bold">{formatDuration(multisig.config.timelockPeriod)}</span>
+                 <Button variant="outline" size="sm" onClick={() => openModal('timelock', formatDuration(multisig.config.timelockPeriod))}>Change</Button>
+              </div>
+           </div>
+
+           {/* Expiry */}
+           <div className="flex items-center justify-between py-4">
+              <div>
+                 <p className="font-medium text-sm">Proposal Expiry</p>
+                 <p className="text-xs text-muted-foreground">How long a proposal remains valid.</p>
+              </div>
+              <div className="flex items-center gap-4">
+                 <span className="font-mono font-bold">{formatDuration(multisig.config.expiryPeriod)}</span>
+                 <Button variant="outline" size="sm" onClick={() => openModal('expiry', formatDuration(multisig.config.expiryPeriod))}>Change</Button>
+              </div>
+           </div>
+
+           {/* Min Owners */}
+           <div className="flex items-center justify-between py-4 last:pb-0">
+              <div>
+                 <p className="font-medium text-sm">Minimum Signers</p>
+                 <p className="text-xs text-muted-foreground">Absolute minimum number of owners required.</p>
+              </div>
+              <div className="flex items-center gap-4">
+                 <span className="font-mono font-bold">{multisig.config.minOwners}</span>
+                 <Button variant="outline" size="sm" onClick={() => openModal('minOwners', multisig.config.minOwners)}>Change</Button>
+              </div>
+           </div>
+        </CardContent>
+      </Card>
+
+      {/* Emergency Zone */}
+      <Card className={`border-2 ${multisig.config.paused ? 'border-emerald-500 bg-emerald-500/5' : 'border-destructive/50 bg-destructive/5'}`}>
+        <CardHeader>
+           <CardTitle className="flex items-center gap-2 text-foreground">
+              <ShieldAlert className={`h-5 w-5 ${multisig.config.paused ? 'text-emerald-600' : 'text-destructive'}`} /> 
+              Emergency Controls
+           </CardTitle>
+        </CardHeader>
+        <CardContent>
+           <div className="flex items-center justify-between">
+              <div>
+                 <p className="font-medium text-sm">Contract Status: <span className="uppercase font-bold">{multisig.config.paused ? 'Paused' : 'Active'}</span></p>
+                 <p className="text-xs text-muted-foreground max-w-md mt-1">
+                    {multisig.config.paused 
+                      ? 'Contract is currently paused. Owners can unpause to resume operations.' 
+                      : 'Pausing the contract prevents any new transactions from being executed. Use in emergencies.'}
+                 </p>
+              </div>
+              <Button 
+                 variant={multisig.config.paused ? 'default' : 'destructive'} 
+                 onClick={handlePauseToggle}
+                 disabled={isPausePending}
+              >
+                 {isPausePending ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+                    <>
+                       {multisig.config.paused ? <PlayCircle className="h-4 w-4 mr-2"/> : <PauseCircle className="h-4 w-4 mr-2"/>}
+                       {multisig.config.paused ? 'Unpause Contract' : 'Pause Contract'}
+                    </>
+                 )}
               </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+           </div>
+        </CardContent>
+      </Card>
 
-      {/* Danger Zone */}
-      <div className="border-t border-border pt-6 space-y-4">
-        <div>
-          <h3 className="text-lg font-semibold text-destructive">Danger Zone</h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            Actions that affect the entire multisig controller
-          </p>
-        </div>
-
-        <Card className={`${multisig.config.paused ? 'border-emerald-500 bg-emerald-500/10' : 'border-destructive bg-destructive/10'}`}>
-          <CardContent className="p-4 flex items-center justify-between">
-            <div>
-              <p className="font-medium">
-                {multisig.config.paused ? 'Unpause Contract' : 'Pause Contract'}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {multisig.config.paused 
-                  ? 'Resume normal operations and allow transactions.' 
-                  : 'Prevent all transactions (emergency only).'}
-              </p>
-            </div>
-            <Button 
-               variant={multisig.config.paused ? 'default' : 'destructive'} 
-               size="sm"
-               onClick={handlePauseToggle}
-               disabled={isPending}
-            >
-              {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-                <>
-                  {multisig.config.paused ? <PlayCircle className="h-4 w-4 mr-2"/> : <PauseCircle className="h-4 w-4 mr-2"/>}
-                  {multisig.config.paused ? 'Unpause' : 'Pause'}
-                </>
-              )}
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      <GovernanceProposalModal 
+        isOpen={!!modalType}
+        onClose={() => setModalType(null)}
+        type={modalType}
+        controllerAddress={multisig.controller}
+        currentValue={modalCurrentValue}
+      />
     </div>
   );
 }

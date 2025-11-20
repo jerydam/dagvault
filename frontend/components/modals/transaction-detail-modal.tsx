@@ -1,144 +1,162 @@
 'use client';
 
-import { X, Copy, ExternalLink, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import { X, Copy, ExternalLink, CheckCircle, Clock, Loader2, Play, XCircle, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Transaction } from '@/lib/types';
-import { formatAddress } from '@/lib/format';
+import { Transaction } from '@/hooks/use-factory'; 
+import { confirmTransaction, revokeConfirmation, executeTransactionManual } from '@/lib/web3';
+import { ethers } from 'ethers';
+import { formatAmount } from '@/lib/format';
 
 interface TransactionDetailModalProps {
   isOpen: boolean;
   transaction?: Transaction;
+  controllerAddress: string;
   onClose: () => void;
 }
 
 export function TransactionDetailModal({
   isOpen,
   transaction,
+  controllerAddress,
   onClose,
 }: TransactionDetailModalProps) {
+  const [isPending, setIsPending] = useState(false);
+  const [copied, setCopied] = useState(false);
+
   if (!isOpen || !transaction) return null;
 
   const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text);
+     navigator.clipboard.writeText(text);
+     setCopied(true);
+     setTimeout(() => setCopied(false), 1000);
+  };
+
+  const handleAction = async (action: 'confirm' | 'revoke' | 'execute') => {
+    setIsPending(true);
+    try {
+      if (action === 'confirm') await confirmTransaction(controllerAddress, transaction.id);
+      if (action === 'revoke') await revokeConfirmation(controllerAddress, transaction.id);
+      if (action === 'execute') await executeTransactionManual(controllerAddress, transaction.id);
+      
+      onClose();
+      window.location.reload();
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 animate-in fade-in">
-      <Card className="w-full max-w-md border-border bg-card max-h-[80vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-6 border-b border-border sticky top-0 bg-card">
-          <h2 className="text-xl font-bold">Transaction #{transaction.id}</h2>
-          <button
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
+      <Card className="w-full max-w-md border-border bg-card max-h-[85vh] overflow-y-auto shadow-2xl">
+        <div className="flex items-center justify-between p-6 border-b border-border sticky top-0 bg-card z-10">
+          <div>
+             <h2 className="text-xl font-bold">Transaction #{transaction.id}</h2>
+             <p className="text-xs text-muted-foreground">{new Date(Number(transaction.timestamp) * 1000).toLocaleString()}</p>
+          </div>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground bg-muted p-1 rounded-full">
             <X className="h-5 w-5" />
           </button>
         </div>
 
         <CardContent className="p-6 space-y-6">
-          {/* Status */}
-          <div className="flex items-center gap-2">
+          {/* Status Badge */}
+          <div className="flex justify-center">
             {transaction.executed ? (
-              <>
-                <CheckCircle className="h-5 w-5 text-emerald-500" />
-                <Badge variant="default" className="bg-emerald-600">
-                  Executed
-                </Badge>
-              </>
+              <Badge className="bg-emerald-500 hover:bg-emerald-600 px-4 py-1 text-base">
+                 <CheckCircle className="h-4 w-4 mr-2"/> Executed
+              </Badge>
             ) : (
-              <>
-                <Clock className="h-5 w-5 text-orange-500" />
-                <Badge variant="secondary" className="bg-orange-600">
-                  Pending
-                </Badge>
-              </>
+              <Badge variant="secondary" className="bg-orange-500/10 text-orange-500 border-orange-500/20 px-4 py-1 text-base">
+                 <Clock className="h-4 w-4 mr-2"/> Pending Execution
+              </Badge>
             )}
           </div>
 
-          {/* Details Grid */}
-          <div className="space-y-4">
+          {/* Data Table */}
+          <div className="space-y-4 border rounded-lg p-4 bg-muted/20">
+            
+            {/* Type */}
             <div>
-              <p className="text-xs text-muted-foreground mb-1">Initiator</p>
-              <div className="flex items-center gap-2">
-                <code className="text-sm font-mono">{formatAddress(transaction.initiator, 6)}</code>
-                <button
-                  onClick={() => handleCopy(transaction.initiator)}
-                  className="p-1 hover:bg-muted rounded"
-                >
-                  <Copy className="h-3.5 w-3.5" />
+               <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Operation Type</p>
+               <p className="font-medium text-sm flex items-center gap-2">
+                  {transaction.isTokenTransfer ? 'ERC20 Token Transfer' : transaction.data !== '0x' ? 'Contract Interaction' : 'Native ETH Transfer'}
+               </p>
+            </div>
+
+            {/* From */}
+            <div>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Initiated By</p>
+              <div className="flex items-center gap-2 group">
+                <code className="text-xs font-mono break-all">{transaction.initiator}</code>
+                <button onClick={() => handleCopy(transaction.initiator)} className="opacity-50 group-hover:opacity-100">
+                   {copied ? <Check className="h-3 w-3 text-green-500"/> : <Copy className="h-3 w-3"/>}
                 </button>
               </div>
             </div>
 
+            {/* To */}
             <div>
-              <p className="text-xs text-muted-foreground mb-1">To Address</p>
-              <div className="flex items-center gap-2">
-                <code className="text-sm font-mono">{formatAddress(transaction.to, 6)}</code>
-                <button
-                  onClick={() => handleCopy(transaction.to)}
-                  className="p-1 hover:bg-muted rounded"
-                >
-                  <Copy className="h-3.5 w-3.5" />
+              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Target Address</p>
+              <div className="flex items-center gap-2 group">
+                <code className="text-xs font-mono break-all">{transaction.to}</code>
+                <button onClick={() => handleCopy(transaction.to)} className="opacity-50 group-hover:opacity-100">
+                   <Copy className="h-3 w-3"/>
                 </button>
               </div>
             </div>
 
+            {/* Value */}
             <div>
-              <p className="text-xs text-muted-foreground mb-1">Value</p>
-              <p className="text-lg font-semibold">
-                {(Number(transaction.value) / 1e18).toFixed(4)} DAG
+              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Value</p>
+              <p className="text-xl font-bold">
+                {formatAmount(transaction.value)} <span className="text-sm font-normal text-muted-foreground">ETH</span>
               </p>
             </div>
 
-            <div>
-              <p className="text-xs text-muted-foreground mb-1">Confirmations</p>
-              <div className="space-y-2">
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-primary"
-                    style={{ width: `${(transaction.confirmationCount / 5) * 100}%` }}
-                  />
-                </div>
-                <p className="text-sm font-medium">
-                  {transaction.confirmationCount}/5 confirmations
-                </p>
-              </div>
-            </div>
-
-            {!transaction.executed && (
+            {/* Data */}
+            {transaction.data !== '0x' && (
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Confirmed By</p>
-                <div className="space-y-1">
-                  {transaction.confirmations.map((addr, idx) => (
-                    <p key={idx} className="text-xs text-foreground">
-                      {formatAddress(addr)}
-                    </p>
-                  ))}
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Calldata</p>
+                <div className="bg-muted p-2 rounded max-h-24 overflow-y-auto border">
+                  <code className="text-[10px] break-all font-mono">{transaction.data}</code>
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Confirmations */}
+          <div>
+              <div className="flex justify-between mb-2">
+                 <span className="text-sm font-medium">Confirmations</span>
+                 <span className="text-sm text-muted-foreground">{transaction.confirmationCount} Collected</span>
+              </div>
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div className={`h-full ${transaction.executed ? 'bg-emerald-500' : 'bg-primary'}`} style={{ width: `${Math.min(100, (Number(transaction.confirmationCount) * 20))}%` }} />
+              </div>
           </div>
 
           {/* Actions */}
           {!transaction.executed && (
-            <div className="flex gap-2 pt-4 border-t border-border flex-col sm:flex-row">
-              <Button variant="outline" className="flex-1" size="sm">
-                Confirm
-              </Button>
-              {transaction.confirmationCount > 0 && (
-                <Button variant="ghost" className="flex-1 text-destructive" size="sm">
-                  Revoke
-                </Button>
-              )}
+            <div className="grid grid-cols-2 gap-3 pt-2">
+               <Button variant="outline" onClick={() => handleAction('confirm')} disabled={isPending}>
+                  {isPending ? <Loader2 className="h-4 w-4 animate-spin"/> : <CheckCircle className="h-4 w-4 mr-2"/>} 
+                  Confirm
+               </Button>
+               
+               <Button onClick={() => handleAction('execute')} disabled={isPending}>
+                  <Play className="h-4 w-4 mr-2"/> Execute
+               </Button>
+
+               <Button variant="ghost" className="col-span-2 text-destructive hover:text-destructive hover:bg-destructive/10 h-8 text-xs" onClick={() => handleAction('revoke')} disabled={isPending || Number(transaction.confirmationCount) === 0}>
+                  Revoke my confirmation
+               </Button>
             </div>
           )}
-
-          <Button variant="outline" className="w-full">
-            <ExternalLink className="h-4 w-4 mr-2" />
-            View on Explorer
-          </Button>
         </CardContent>
       </Card>
     </div>

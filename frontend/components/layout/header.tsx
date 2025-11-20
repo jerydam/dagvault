@@ -9,8 +9,8 @@ import { formatAddress } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import { BrowserProvider, hexlify } from 'ethers';
 
-// Chain ID for Celo Sepolia
-const CELO_SEPOLIA_CHAIN_ID = 11142220; 
+// Chain ID for Base sepolia
+const BASE_SEPOLIA_CHAIN_ID = 84532; 
 
 export function Header() {
   const [isDark, setIsDark] = useState(false);
@@ -21,7 +21,7 @@ export function Header() {
   const [isConnected, setIsConnected] = useState(false);
   const [chainId, setChainId] = useState<number | null>(null);
 
-  const isCorrectChain = chainId === CELO_SEPOLIA_CHAIN_ID;
+  const isCorrectChain = chainId === BASE_SEPOLIA_CHAIN_ID;
 
   // --- Theme Logic ---
   const toggleDarkMode = () => {
@@ -159,7 +159,7 @@ export function Header() {
                  "h-2 w-2 rounded-full",
                  isCorrectChain ? "bg-emerald-500" : "bg-red-500"
                )} />
-               <span>{isCorrectChain ? 'Celo Sepolia' : 'Wrong Network'}</span>
+               <span>{isCorrectChain ? 'Base sepolia' : 'Wrong Network'}</span>
              </div>
           )}
 

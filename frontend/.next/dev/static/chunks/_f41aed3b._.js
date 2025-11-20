@@ -161,8 +161,8 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-// Chain ID for Celo Sepolia
-const CELO_SEPOLIA_CHAIN_ID = 11142220;
+// Chain ID for Base sepolia
+const BASE_SEPOLIA_CHAIN_ID = 84532;
 function Header() {
     _s();
     const [isDark, setIsDark] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -171,7 +171,7 @@ function Header() {
     const [address, setAddress] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [isConnected, setIsConnected] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [chainId, setChainId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    const isCorrectChain = chainId === CELO_SEPOLIA_CHAIN_ID;
+    const isCorrectChain = chainId === BASE_SEPOLIA_CHAIN_ID;
     // --- Theme Logic ---
     const toggleDarkMode = ()=>{
         setIsDark(!isDark);
@@ -354,7 +354,7 @@ function Header() {
                                     columnNumber: 16
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: isCorrectChain ? 'Celo Sepolia' : 'Wrong Network'
+                                    children: isCorrectChain ? 'Base sepolia' : 'Wrong Network'
                                 }, void 0, false, {
                                     fileName: "[project]/components/layout/header.tsx",
                                     lineNumber: 162,
@@ -598,6 +598,137 @@ const MULTISIG_CONTROLLER_ABI = [
         ],
         "name": "addOwnerInternal",
         "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "isTokenTransfer",
+                "type": "bool"
+            },
+            {
+                "internalType": "address",
+                "name": "tokenAddress",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+            }
+        ],
+        "name": "submitTransaction",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "txId",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+            },
+            {
+                "internalType": "address[]",
+                "name": "recipients",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "amounts",
+                "type": "uint256[]"
+            }
+        ],
+        "name": "submitBatchTransferDifferent",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "txId",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+            },
+            {
+                "internalType": "address[]",
+                "name": "recipients",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256",
+                "name": "amountPer",
+                "type": "uint256"
+            }
+        ],
+        "name": "submitBatchTransferEqual",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "txId",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "ownerName",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "pct",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "removable",
+                "type": "bool"
+            }
+        ],
+        "name": "submitAddOwner",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -2248,6 +2379,8 @@ __turbopack_context__.s([
     ()=>MULTISIG_FACTORY_ADDRESS,
     "confirmTransaction",
     ()=>confirmTransaction,
+    "confirmTransactionsBatch",
+    ()=>confirmTransactionsBatch,
     "createMultiSig",
     ()=>createMultiSig,
     "executeTransactionManual",
@@ -2327,7 +2460,7 @@ async function initializeProvider() {
         signer
     };
 }
-const MULTISIG_FACTORY_ADDRESS = '0xF3646E4C515Bdf65a34cc556C94b796faE28fC8a';
+const MULTISIG_FACTORY_ADDRESS = '0xc645B1C83A122672477fa9921Ef74d62e6035eb7';
 function getProvider() {
     if (!provider) throw new Error('Provider not initialized');
     return provider;
@@ -2336,6 +2469,70 @@ function getSigner() {
     if (!signer) throw new Error('Signer not initialized');
     return signer;
 }
+const getSignedContract = async (contractAddress)=>{
+    if (!window.ethereum) throw new Error("No crypto wallet found");
+    const provider = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].BrowserProvider(window.ethereum);
+    // CRITICAL FIX: Must use a signer to send transactions
+    const signer = await provider.getSigner();
+    return new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].Contract(contractAddress, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$abi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MULTISIG_CONTROLLER_ABI"], signer);
+};
+const submitTransaction = async (controllerAddress, to, value, isToken, tokenAddress, data)=>{
+    try {
+        const contract = await getSignedContract(controllerAddress);
+        // Convert string "1.5" to Wei BigInt
+        const valueWei = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].parseEther(value || '0');
+        // Ensure data is formatted correctly
+        const hexData = data.startsWith('0x') ? data : `0x${data}`;
+        const targetToken = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].isAddress(tokenAddress) ? tokenAddress : __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].ZeroAddress;
+        const tx = await contract.submitTransaction(to, valueWei, isToken, targetToken, hexData);
+        return await tx.wait();
+    } catch (error) {
+        console.error("submitTransaction Error:", error);
+        throw error;
+    }
+};
+const submitBatchTransferEqual = async (controllerAddress, token, recipients, amountPer // "1.5"
+)=>{
+    try {
+        const contract = await getSignedContract(controllerAddress);
+        const amountWei = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].parseEther(amountPer || '0');
+        const targetToken = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].isAddress(token) ? token : __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].ZeroAddress;
+        const tx = await contract.submitBatchTransferEqual(targetToken, recipients, amountWei);
+        return await tx.wait();
+    } catch (error) {
+        console.error("submitBatchTransferEqual Error:", error);
+        throw error;
+    }
+};
+const submitBatchTransferDifferent = async (controllerAddress, token, recipients, amounts // ["1.5", "2.0"]
+)=>{
+    try {
+        const contract = await getSignedContract(controllerAddress);
+        // Convert array of strings to array of BigInts
+        const amountsWei = amounts.map((amt)=>__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].parseEther(amt || '0'));
+        const targetToken = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].isAddress(token) ? token : __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].ZeroAddress;
+        const tx = await contract.submitBatchTransferDifferent(targetToken, recipients, amountsWei);
+        return await tx.wait();
+    } catch (error) {
+        console.error("submitBatchTransferDifferent Error:", error);
+        throw error;
+    }
+};
+const submitAddOwner = async (controllerAddress, newOwner, ownerName, pct, removable)=>{
+    try {
+        const contract = await getSignedContract(controllerAddress);
+        // Ensure percentage is BigInt (assuming contract uses basis points or integer percentage)
+        // If your contract expects 20% as "20", pass 20. 
+        // If it expects basis points (2000 for 20%), adjust accordingly. 
+        // Based on your ABI type "uint256", simple casting is safe here.
+        const pctBigInt = BigInt(pct);
+        const tx = await contract.submitAddOwner(newOwner, ownerName, pctBigInt, removable);
+        return await tx.wait();
+    } catch (error) {
+        console.error("submitAddOwner Error:", error);
+        throw error;
+    }
+};
 async function getConnectedWalletAddress(controllerAddress) {
     try {
         const controller = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$contract$2f$contract$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contract"](controllerAddress, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$abi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MULTISIG_CONTROLLER_ABI"], getProvider());
@@ -2391,25 +2588,6 @@ async function getMultiSigInfo(factoryAddress, controllerAddress) {
         exists: info.exists
     };
 }
-async function submitTransaction(controllerAddress, to, value, isTokenTransfer, tokenAddress, data = '0x') {
-    const controller = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$contract$2f$contract$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contract"](controllerAddress, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$abi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MULTISIG_CONTROLLER_ABI"], signer);
-    const tx = await controller.submitTransaction(to, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].parseEther(value), isTokenTransfer, tokenAddress, data);
-    return await tx.wait();
-}
-async function submitBatchTransferDifferent(controllerAddress, tokenAddress, recipients, amounts// Array of string amounts (e.g. "1.5", "0.2")
-) {
-    const controller = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$contract$2f$contract$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contract"](controllerAddress, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$abi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MULTISIG_CONTROLLER_ABI"], signer);
-    // Parse amounts based on whether it's a token or native
-    // For simplicity here assuming 18 decimals, but in production check token decimals
-    const parsedAmounts = amounts.map((a)=>__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].parseEther(a));
-    const tx = await controller.submitBatchTransferDifferent(tokenAddress, recipients, parsedAmounts);
-    return await tx.wait();
-}
-async function submitBatchTransferEqual(controllerAddress, tokenAddress, recipients, amountPer) {
-    const controller = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$contract$2f$contract$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contract"](controllerAddress, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$abi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MULTISIG_CONTROLLER_ABI"], signer);
-    const tx = await controller.submitBatchTransferEqual(tokenAddress, recipients, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].parseEther(amountPer));
-    return await tx.wait();
-}
 async function confirmTransaction(controllerAddress, transactionId) {
     const controller = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$contract$2f$contract$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contract"](controllerAddress, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$abi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MULTISIG_CONTROLLER_ABI"], signer);
     const tx = await controller.confirmTransaction(transactionId);
@@ -2423,11 +2601,6 @@ async function executeTransactionManual(controllerAddress, transactionId) {
 async function revokeConfirmation(controllerAddress, transactionId) {
     const controller = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$contract$2f$contract$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contract"](controllerAddress, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$abi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MULTISIG_CONTROLLER_ABI"], signer);
     const tx = await controller.revokeConfirmation(transactionId);
-    return await tx.wait();
-}
-async function submitAddOwner(controllerAddress, newOwner, ownerName, percentage, removable) {
-    const controller = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$contract$2f$contract$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contract"](controllerAddress, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$abi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MULTISIG_CONTROLLER_ABI"], signer);
-    const tx = await controller.submitAddOwner(newOwner, ownerName, percentage, removable);
     return await tx.wait();
 }
 async function submitChangeName(controllerAddress, newName) {
@@ -2517,6 +2690,13 @@ async function isMultisigPaused(controllerAddress) {
 async function executeWalletTransaction(walletAddress, to, value, isTokenTransfer, tokenAddress, data = '0x') {
     const wallet = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$contract$2f$contract$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contract"](walletAddress, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$abi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["COMPANY_WALLET_ABI"], signer);
     const tx = await wallet.executeTransaction(to, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$ethers$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__ethers$3e$__["ethers"].parseEther(value), isTokenTransfer, tokenAddress, data);
+    return await tx.wait();
+}
+async function confirmTransactionsBatch(controllerAddress, transactionIds) {
+    const controller = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ethers$40$6$2e$15$2e$0_bufferutil$40$4$2e$0$2e$9_utf$2d$8$2d$validate$40$5$2e$0$2e$10$2f$node_modules$2f$ethers$2f$lib$2e$esm$2f$contract$2f$contract$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Contract"](controllerAddress, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$abi$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MULTISIG_CONTROLLER_ABI"], getSigner());
+    // WARNING: This requires your Smart Contract to have a confirmTransactionsBatch function.
+    // If your contract does not support batching, this line will fail at runtime.
+    const tx = await controller.confirmTransactionsBatch(transactionIds);
     return await tx.wait();
 }
 async function getTokenBalance(walletAddress, tokenAddress) {
@@ -2831,8 +3011,9 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-// Celo Sepolia Chain ID in decimal format
-const CELO_SEPOLIA_CHAIN_ID = 11142220;
+// Base Sepolia Chain Configuration
+const BASE_SEPOLIA_CHAIN_ID = 84532;
+const BASE_SEPOLIA_HEX = '0x14a34'; // 84532 converted to hex
 function NetworkSwitchModal() {
     _s();
     const [isOpen, setIsOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -2841,13 +3022,13 @@ function NetworkSwitchModal() {
     // Function to check connection and chain ID
     const checkNetworkStatus = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "NetworkSwitchModal.useCallback[checkNetworkStatus]": async ()=>{
-            if (typeof window.ethereum === 'undefined') {
+            if (("TURBOPACK compile-time value", "object") === 'undefined' || !window.ethereum) {
                 setIsConnected(false);
                 setCurrentChainId(null);
                 return;
             }
             try {
-                // Check if wallet is connected (by checking accounts)
+                // Check if wallet is connected
                 const accounts = await window.ethereum.request({
                     method: 'eth_accounts'
                 });
@@ -2861,7 +3042,7 @@ function NetworkSwitchModal() {
                     const chainIdDec = parseInt(chainIdHex, 16);
                     setCurrentChainId(chainIdDec);
                     // Show modal if connected but on wrong chain
-                    if (chainIdDec !== CELO_SEPOLIA_CHAIN_ID) {
+                    if (chainIdDec !== BASE_SEPOLIA_CHAIN_ID) {
                         setIsOpen(true);
                     } else {
                         setIsOpen(false);
@@ -2879,93 +3060,85 @@ function NetworkSwitchModal() {
     }["NetworkSwitchModal.useCallback[checkNetworkStatus]"], []);
     // Handler for network switch
     const handleSwitchNetwork = async ()=>{
-        if (typeof window.ethereum === 'undefined') {
+        if (!window.ethereum) {
             console.error('MetaMask or similar wallet not found.');
             return;
         }
         try {
-            // Ethers/RPC method to switch network
+            // Switch network using HEX ID
             await window.ethereum.request({
                 method: 'wallet_switchEthereumChain',
                 params: [
                     {
-                        chainId: CELO_SEPOLIA_CHAIN_ID
+                        chainId: BASE_SEPOLIA_HEX
                     }
                 ]
             });
-            // If successful, the 'chainChanged' event will trigger checkNetworkStatus
             setIsOpen(false);
         } catch (error) {
-            // 4902 is the error code for "Chain hasn't been added to MetaMask."
+            // 4902: Chain hasn't been added to MetaMask
             if (error.code === 4902) {
-                // If the chain isn't added, attempt to add it first
                 console.log('Chain not recognized, attempting to add...');
-                await addCeloSepoliaChain();
+                await addBaseSepoliaChain();
             } else {
                 console.error('Failed to switch network:', error);
             }
         }
     };
     // Helper function to add the chain if not present
-    const addCeloSepoliaChain = async ()=>{
+    const addBaseSepoliaChain = async ()=>{
         try {
             await window.ethereum.request({
                 method: 'wallet_addEthereumChain',
                 params: [
                     {
-                        chainId: CELO_SEPOLIA_CHAIN_ID,
-                        chainName: 'Celo Sepolia Testnet',
+                        chainId: BASE_SEPOLIA_HEX,
+                        chainName: 'Base Sepolia',
                         nativeCurrency: {
-                            name: 'Celo',
-                            symbol: 'CELO',
+                            name: 'Ether',
+                            symbol: 'ETH',
                             decimals: 18
                         },
                         rpcUrls: [
-                            'https://sepolia-rc.celo-testnet.org/'
+                            'https://sepolia.base.org'
                         ],
                         blockExplorerUrls: [
-                            'https://celo-sepolia.explorers.ws/'
+                            'https://sepolia.basescan.org'
                         ]
                     }
                 ]
             });
-        // After adding, wallet automatically switches, triggering 'chainChanged'
         } catch (addError) {
-            console.error('Failed to add Celo Sepolia Testnet:', addError);
+            console.error('Failed to add Base Sepolia:', addError);
         }
     };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "NetworkSwitchModal.useEffect": ()=>{
             checkNetworkStatus();
-            if (typeof window.ethereum === 'undefined') return;
-            // Set up listeners for changes (Ethers/Wagmi best practice)
+            if (!window.ethereum) return;
+            // Reload page on network/account change to ensure clean state
             const handleChainChanged = {
-                "NetworkSwitchModal.useEffect.handleChainChanged": (chainIdHex)=>{
-                    // Reload on network change to clear state and re-initialize
-                    window.location.reload();
-                }
+                "NetworkSwitchModal.useEffect.handleChainChanged": ()=>window.location.reload()
             }["NetworkSwitchModal.useEffect.handleChainChanged"];
             const handleAccountsChanged = {
-                "NetworkSwitchModal.useEffect.handleAccountsChanged": (accounts)=>{
-                    // Reload on account change
-                    window.location.reload();
-                }
+                "NetworkSwitchModal.useEffect.handleAccountsChanged": ()=>window.location.reload()
             }["NetworkSwitchModal.useEffect.handleAccountsChanged"];
             window.ethereum.on('chainChanged', handleChainChanged);
             window.ethereum.on('accountsChanged', handleAccountsChanged);
-            // Clean up listeners
             return ({
                 "NetworkSwitchModal.useEffect": ()=>{
-                    window.ethereum.removeListener('chainChanged', handleChainChanged);
-                    window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+                    if (window.ethereum) {
+                        window.ethereum.removeListener('chainChanged', handleChainChanged);
+                        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+                    }
                 }
             })["NetworkSwitchModal.useEffect"];
         }
     }["NetworkSwitchModal.useEffect"], [
         checkNetworkStatus
-    ]); // Dependency on useCallback
+    ]);
     // Render nothing if not connected or already on the correct chain
-    if (!isConnected || currentChainId === CELO_SEPOLIA_CHAIN_ID) {
+    if (!isConnected || currentChainId === BASE_SEPOLIA_CHAIN_ID) {
         return null;
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlertDialog"], {
@@ -2982,109 +3155,166 @@ function NetworkSwitchModal() {
                                     className: "h-5 w-5 text-red-500"
                                 }, void 0, false, {
                                     fileName: "[project]/components/modals/network-switch-modal.tsx",
-                                    lineNumber: 154,
+                                    lineNumber: 142,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlertDialogTitle"], {
                                     children: "Wrong Network"
                                 }, void 0, false, {
                                     fileName: "[project]/components/modals/network-switch-modal.tsx",
-                                    lineNumber: 155,
+                                    lineNumber: 143,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/modals/network-switch-modal.tsx",
-                            lineNumber: 153,
+                            lineNumber: 141,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlertDialogDescription"], {
                             className: "pt-2",
-                            children: "You are currently connected to the wrong network. Please switch to Celo Sepolia to continue using the Multisig Factory."
-                        }, void 0, false, {
+                            children: [
+                                "You are currently connected to the wrong network. Please switch to ",
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                    children: "Base Sepolia"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/modals/network-switch-modal.tsx",
+                                    lineNumber: 146,
+                                    columnNumber: 80
+                                }, this),
+                                " to continue using the Multisig Factory."
+                            ]
+                        }, void 0, true, {
                             fileName: "[project]/components/modals/network-switch-modal.tsx",
-                            lineNumber: 157,
+                            lineNumber: 145,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/modals/network-switch-modal.tsx",
-                    lineNumber: 152,
+                    lineNumber: 140,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-muted p-3 rounded-lg text-sm",
+                    className: "bg-muted p-3 rounded-lg text-sm border border-border",
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "font-semibold text-foreground",
-                            children: "Required: Celo Sepolia Testnet"
-                        }, void 0, false, {
-                            fileName: "[project]/components/modals/network-switch-modal.tsx",
-                            lineNumber: 162,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-muted-foreground text-xs mt-1",
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex justify-between mb-1",
                             children: [
-                                "Current: ",
-                                currentChainId ? `Chain ID: ${currentChainId}` : 'Unknown'
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-muted-foreground",
+                                    children: "Required Network:"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/modals/network-switch-modal.tsx",
+                                    lineNumber: 152,
+                                    columnNumber: 14
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "font-semibold text-foreground",
+                                    children: "Base Sepolia"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/modals/network-switch-modal.tsx",
+                                    lineNumber: 153,
+                                    columnNumber: 14
+                                }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/modals/network-switch-modal.tsx",
-                            lineNumber: 163,
+                            lineNumber: 151,
                             columnNumber: 11
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: "text-muted-foreground text-xs",
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex justify-between mb-1",
                             children: [
-                                "Required: Chain ID: ",
-                                CELO_SEPOLIA_CHAIN_ID
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-muted-foreground",
+                                    children: "Chain ID:"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/modals/network-switch-modal.tsx",
+                                    lineNumber: 156,
+                                    columnNumber: 14
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "font-mono text-xs",
+                                    children: BASE_SEPOLIA_CHAIN_ID
+                                }, void 0, false, {
+                                    fileName: "[project]/components/modals/network-switch-modal.tsx",
+                                    lineNumber: 157,
+                                    columnNumber: 14
+                                }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/modals/network-switch-modal.tsx",
-                            lineNumber: 166,
+                            lineNumber: 155,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex justify-between pt-2 border-t border-border/50 mt-2",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-muted-foreground",
+                                    children: "Your Connection:"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/modals/network-switch-modal.tsx",
+                                    lineNumber: 160,
+                                    columnNumber: 14
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "font-mono text-xs text-orange-500",
+                                    children: [
+                                        "Chain ID: ",
+                                        currentChainId || 'Unknown'
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/modals/network-switch-modal.tsx",
+                                    lineNumber: 161,
+                                    columnNumber: 14
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/modals/network-switch-modal.tsx",
+                            lineNumber: 159,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/modals/network-switch-modal.tsx",
-                    lineNumber: 161,
+                    lineNumber: 150,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex gap-3 justify-end",
+                    className: "flex gap-3 justify-end mt-2",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlertDialogCancel"], {
                             children: "Dismiss"
                         }, void 0, false, {
                             fileName: "[project]/components/modals/network-switch-modal.tsx",
-                            lineNumber: 171,
+                            lineNumber: 170,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlertDialogAction"], {
                             onClick: handleSwitchNetwork,
-                            className: "bg-primary text-primary-foreground",
-                            children: "Switch Network"
+                            children: "Switch to Base Sepolia"
                         }, void 0, false, {
                             fileName: "[project]/components/modals/network-switch-modal.tsx",
-                            lineNumber: 172,
+                            lineNumber: 171,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/modals/network-switch-modal.tsx",
-                    lineNumber: 170,
+                    lineNumber: 167,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/modals/network-switch-modal.tsx",
-            lineNumber: 151,
+            lineNumber: 139,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/modals/network-switch-modal.tsx",
-        lineNumber: 150,
+        lineNumber: 138,
         columnNumber: 5
     }, this);
 }
