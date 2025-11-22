@@ -1,7 +1,3 @@
-Here is a comprehensive, professional, and user-friendly `README.md` tailored for **Dagvault**.
-
-It includes clear setup instructions, a feature breakdown, and visual placeholders so your repository looks top-tier on GitHub.
-
 -----
 
 # Dagvault Protocol
